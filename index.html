@@ -1,0 +1,1751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'"/>
+<meta name="referrer" content="no-referrer"/>
+<meta name="description" content="AI Foundations: Practical AI for Business. A free, self-paced, no-code introduction to AI concepts, prompting, agents, workflows, and safe use at work. Created by Daniel DeSandre."/>
+<meta name="author" content="Daniel DeSandre"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%A0%3C/text%3E%3C/svg%3E"/>
+<title>AI Foundations: Practical AI for Business</title>
+<style>
+:root {
+  --bg: #0d0f14;
+  --surface: #141720;
+  --surface2: #1c2030;
+  --border: #252a3a;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --accent-glow: rgba(99,102,241,0.15);
+  --green: #10b981;
+  --yellow: #f59e0b;
+  --red: #ef4444;
+  --blue: #38bdf8;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --sidebar-w: 280px;
+  --header-h: 56px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+/* ── HEADER ── */
+#header{position:fixed;top:0;left:0;right:0;height:var(--header-h);background:rgba(13,15,20,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px 0 0;z-index:1000;}
+#header-left{display:flex;align-items:center;gap:0;height:100%;}
+#sidebar-toggle{background:none;border:none;color:var(--text2);cursor:pointer;padding:0 16px;height:100%;display:flex;align-items:center;font-size:20px;transition:color .2s;}
+#sidebar-toggle:hover{color:var(--text);}
+#header-brand{font-size:14px;font-weight:700;color:var(--text);letter-spacing:0.3px;}
+#header-brand span{color:var(--accent2);}
+#progress-wrap{display:flex;align-items:center;gap:10px;}
+#progress-label{font-size:11px;color:var(--text3);font-weight:600;letter-spacing:0.5px;}
+#progress-bar-outer{width:120px;height:4px;background:var(--border);border-radius:4px;overflow:hidden;}
+#progress-bar-inner{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .4s ease;}
+#progress-pct{font-size:11px;color:var(--accent2);font-weight:700;min-width:30px;text-align:right;}
+
+/* ── LAYOUT ── */
+#layout{display:flex;padding-top:var(--header-h);}
+
+/* ── SIDEBAR ── */
+#sidebar{width:var(--sidebar-w);min-height:calc(100vh - var(--header-h));background:var(--surface);border-right:1px solid var(--border);position:fixed;top:var(--header-h);left:0;bottom:0;overflow-y:auto;transition:transform .3s ease;z-index:900;}
+#sidebar.hidden{transform:translateX(-100%);}
+#sidebar::-webkit-scrollbar{width:4px;}
+#sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+.sb-unit{margin-bottom:4px;}
+.sb-unit-header{padding:10px 16px 6px;font-size:10px;font-weight:800;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;display:flex;align-items:center;gap:6px;}
+.sb-unit-num{background:var(--accent);color:#fff;font-size:9px;font-weight:800;width:16px;height:16px;border-radius:4px;display:flex;align-items:center;justify-content:center;}
+.sb-chapter{display:flex;align-items:center;gap:8px;padding:7px 16px 7px 28px;cursor:pointer;font-size:12.5px;color:var(--text2);transition:all .15s;border-left:2px solid transparent;position:relative;}
+.sb-chapter:hover{color:var(--text);background:var(--surface2);}
+.sb-chapter.active{color:var(--accent2);background:var(--accent-glow);border-left-color:var(--accent);}
+.sb-chapter.completed .sb-check{color:var(--green);}
+.sb-check{font-size:10px;color:var(--border);flex-shrink:0;margin-left:auto;}
+.sb-chapter-num{font-size:10px;color:var(--text3);font-weight:700;min-width:20px;}
+
+/* ── MAIN ── */
+#main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h));transition:margin-left .3s ease;}
+#main.expanded{margin-left:0;}
+#lesson{max-width:820px;margin:0 auto;padding:48px 32px 120px;}
+
+/* ── LESSON HEADER ── */
+.lesson-unit-tag{font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
+.lesson-title{font-size:32px;font-weight:800;color:var(--text);line-height:1.2;margin-bottom:8px;}
+.lesson-subtitle{font-size:15px;color:var(--text2);line-height:1.6;margin-bottom:32px;padding-bottom:32px;border-bottom:1px solid var(--border);}
+
+/* ── SECTIONS ── */
+.section{margin-bottom:40px;}
+.section-label{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:6px;margin-bottom:16px;}
+.section-label.theory{background:rgba(99,102,241,0.12);color:var(--accent2);}
+.section-label.terms{background:rgba(16,185,129,0.1);color:var(--green);}
+.section-label.review{background:rgba(56,189,248,0.1);color:var(--blue);}
+.section-label.quiz{background:rgba(239,68,68,0.1);color:var(--red);}
+.section h2{font-size:20px;font-weight:700;color:var(--text);margin-bottom:12px;margin-top:24px;}
+.section h3{font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px;margin-top:20px;}
+.section p{font-size:14.5px;color:var(--text2);line-height:1.75;margin-bottom:12px;}
+.section ul,.section ol{padding-left:20px;margin-bottom:12px;}
+.section li{font-size:14.5px;color:var(--text2);line-height:1.75;margin-bottom:4px;}
+.section strong{color:var(--text);font-weight:600;}
+
+/* ── CALLOUT BOXES ── */
+.callout{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:8px;padding:16px 18px;margin:16px 0;font-size:14px;color:var(--text2);line-height:1.7;}
+.callout.green{border-left-color:var(--green);}
+.callout.yellow{border-left-color:var(--yellow);}
+.callout strong{color:var(--text);}
+
+/* ── DID YOU KNOW ── */
+.dyk{background:linear-gradient(135deg,rgba(56,189,248,0.08),rgba(56,189,248,0.02));border:1px solid rgba(56,189,248,0.25);border-radius:12px;padding:18px 20px;margin:18px 0;display:flex;gap:14px;align-items:flex-start;}
+.dyk-icon{font-size:22px;flex-shrink:0;line-height:1;}
+.dyk-body p{font-size:14px;color:var(--text2);line-height:1.7;margin:0;}
+.dyk-label{font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--blue);display:block;margin-bottom:4px;}
+
+/* ── COMMON MISCONCEPTION ── */
+.myth{background:linear-gradient(135deg,rgba(239,68,68,0.07),rgba(239,68,68,0.02));border:1px solid rgba(239,68,68,0.25);border-radius:12px;padding:18px 20px;margin:18px 0;}
+.myth-label{font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--red);display:flex;align-items:center;gap:6px;margin-bottom:8px;}
+.myth-row{display:flex;gap:10px;margin-bottom:6px;font-size:14px;line-height:1.6;}
+.myth-row.wrong{color:#fca5a5;}
+.myth-row.right{color:var(--green);}
+.myth-row span.tag{font-weight:800;flex-shrink:0;width:64px;font-size:11px;letter-spacing:0.5px;padding-top:2px;}
+
+/* ── TERM CARDS ── */
+.term-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+.term-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.term-card-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;transition:background .15s;}
+.term-card-header:hover{background:rgba(255,255,255,0.03);}
+.term-name{font-size:13px;font-weight:700;color:var(--accent2);}
+.term-toggle{font-size:16px;color:var(--text3);transition:transform .2s;}
+.term-card.open .term-toggle{transform:rotate(45deg);}
+.term-body{display:none;padding:0 16px 14px;font-size:13.5px;color:var(--text2);line-height:1.7;border-top:1px solid var(--border);}
+.term-card.open .term-body{display:block;padding-top:12px;}
+
+/* ── QUICK REVIEW ── */
+.review-box{background:rgba(56,189,248,0.06);border:1px solid rgba(56,189,248,0.2);border-radius:12px;padding:20px 22px;margin:16px 0;}
+.review-box ul{padding-left:0;list-style:none;margin:0;}
+.review-box li{display:flex;gap:10px;font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:8px;}
+.review-box li:last-child{margin-bottom:0;}
+.review-box li::before{content:"→";color:var(--blue);font-weight:700;flex-shrink:0;}
+
+/* ── KEY TAKEAWAYS ── */
+.takeaway-box{background:linear-gradient(135deg,rgba(16,185,129,0.08),rgba(16,185,129,0.02));border:1px solid rgba(16,185,129,0.25);border-radius:12px;padding:20px 22px;margin:16px 0;}
+.takeaway-box h3{color:var(--green);font-size:14px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.takeaway-box ul{padding-left:0;list-style:none;margin:0;}
+.takeaway-box li{display:flex;gap:10px;font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:8px;align-items:flex-start;}
+.takeaway-box li:last-child{margin-bottom:0;}
+.takeaway-box li::before{content:"✓";color:var(--green);font-weight:800;flex-shrink:0;}
+
+/* ── DIAGRAM SYSTEM ── */
+.diagram{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:28px 24px 20px;margin:20px 0;}
+.diagram-canvas{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;min-height:120px;padding:12px 0;}
+.dg-box{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;text-align:center;min-width:110px;transition:all .3s ease;opacity:0.45;transform:scale(0.97);}
+.dg-box .dg-icon{font-size:22px;margin-bottom:6px;}
+.dg-box .dg-label{font-size:12.5px;font-weight:700;color:var(--text);}
+.dg-box .dg-sub{font-size:10.5px;color:var(--text3);margin-top:2px;}
+.dg-box.active{opacity:1;transform:scale(1.04);border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow);}
+.dg-box.done{opacity:0.85;border-color:rgba(16,185,129,0.4);}
+.dg-arrow{width:36px;height:2px;background:var(--border);position:relative;flex-shrink:0;transition:background .3s ease;}
+.dg-arrow::after{content:"";position:absolute;right:-1px;top:50%;transform:translateY(-50%);border-style:solid;border-width:4px 0 4px 6px;border-color:transparent transparent transparent var(--border);transition:border-color .3s ease;}
+.dg-arrow.active{background:var(--accent);}
+.dg-arrow.active::after{border-left-color:var(--accent);}
+@media (max-width:640px){.dg-arrow{width:2px;height:24px;}.dg-arrow::after{right:50%;top:auto;bottom:-1px;transform:translateX(50%);border-width:6px 4px 0 4px;border-color:var(--border) transparent transparent transparent;}.dg-arrow.active::after{border-top-color:var(--accent);}}
+.diagram-caption{text-align:center;font-size:13.5px;color:var(--text2);line-height:1.6;min-height:38px;padding:0 20px;margin-top:8px;}
+.diagram-caption strong{color:var(--accent2);}
+.diagram-controls{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:14px;}
+.dg-nav-btn{background:var(--surface);border:1px solid var(--border);color:var(--text2);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.dg-nav-btn:hover:not(:disabled){border-color:var(--accent);color:var(--text);}
+.dg-nav-btn:disabled{opacity:0.3;cursor:default;}
+.dg-dots{display:flex;gap:6px;}
+.dg-dot{width:6px;height:6px;border-radius:50%;background:var(--border);transition:all .2s;}
+.dg-dot.active{background:var(--accent);width:16px;border-radius:3px;}
+
+/* ── COMPARISON (before/after) ── */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0;}
+.compare-col{border-radius:10px;padding:16px 18px;}
+.compare-col.bad{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);}
+.compare-col.good{background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);}
+.compare-col h4{font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
+.compare-col.bad h4{color:var(--red);}
+.compare-col.good h4{color:var(--green);}
+.compare-col p{font-size:13.5px;color:var(--text2);line-height:1.65;margin:0;}
+@media (max-width:640px){.compare{grid-template-columns:1fr;}}
+
+/* ── DECISION TREE ── */
+.dtree{display:flex;flex-direction:column;align-items:center;gap:0;margin:20px 0;}
+.dt-node{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:12px 18px;font-size:13.5px;color:var(--text);text-align:center;max-width:340px;}
+.dt-node.q{border-color:var(--accent);color:var(--accent2);font-weight:600;}
+.dt-node.leaf{border-color:rgba(16,185,129,0.4);background:rgba(16,185,129,0.06);color:var(--green);font-weight:600;}
+.dt-branch{display:flex;gap:24px;margin:10px 0;}
+.dt-col{display:flex;flex-direction:column;align-items:center;gap:8px;}
+.dt-col-label{font-size:10.5px;font-weight:800;color:var(--text3);letter-spacing:0.5px;}
+.dt-line{width:2px;height:16px;background:var(--border);}
+
+/* ── QUIZ ── */
+.quiz-box{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:24px;margin:16px 0;}
+.quiz-box h3{font-size:15px;font-weight:700;color:var(--red);margin-bottom:20px;display:flex;align-items:center;gap:8px;}
+.quiz-q{margin-bottom:24px;}
+.quiz-q p{font-size:14px;color:var(--text);font-weight:600;margin-bottom:10px;line-height:1.6;}
+.quiz-options{display:flex;flex-direction:column;gap:6px;}
+.quiz-option{background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;font-size:13.5px;color:var(--text2);cursor:pointer;transition:all .15s;text-align:left;font-family:inherit;}
+.quiz-option:hover{border-color:var(--accent);color:var(--text);}
+.quiz-option.selected{border-color:var(--accent);background:var(--accent-glow);color:var(--text);}
+.quiz-option.correct{border-color:var(--green);background:rgba(16,185,129,0.08);color:var(--green);}
+.quiz-option.wrong{border-color:var(--red);background:rgba(239,68,68,0.08);color:var(--red);}
+.quiz-option.disabled{cursor:default;}
+.quiz-feedback{margin-top:8px;font-size:13px;line-height:1.6;padding:10px 14px;border-radius:8px;}
+.quiz-feedback.correct{background:rgba(16,185,129,0.08);color:var(--green);}
+.quiz-feedback.wrong{background:rgba(239,68,68,0.08);color:#fca5a5;}
+#quiz-submit{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;font-size:13px;font-weight:700;padding:10px 24px;border-radius:8px;cursor:pointer;margin-top:8px;font-family:inherit;transition:opacity .2s;}
+#quiz-submit:hover{opacity:0.85;}
+#quiz-result{margin-top:16px;font-size:14px;font-weight:700;padding:12px 16px;border-radius:8px;display:none;}
+#quiz-result.pass{background:rgba(16,185,129,0.1);color:var(--green);border:1px solid rgba(16,185,129,0.2);}
+#quiz-result.fail{background:rgba(239,68,68,0.08);color:#fca5a5;border:1px solid rgba(239,68,68,0.2);}
+
+/* ── NAV BUTTONS ── */
+#lesson-nav{display:flex;justify-content:space-between;align-items:center;margin-top:48px;padding-top:24px;border-top:1px solid var(--border);}
+.nav-btn{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text2);font-size:13px;font-weight:600;padding:10px 18px;border-radius:8px;cursor:pointer;transition:all .2s;font-family:inherit;}
+.nav-btn:hover{border-color:var(--accent);color:var(--text);}
+.nav-btn.next{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;color:#fff;}
+.nav-btn.next:hover{opacity:0.88;}
+.nav-btn:disabled{opacity:0.3;cursor:default;}
+.chapter-progress{font-size:12px;color:var(--text3);}
+
+/* ── COMPLETION CARD ── */
+.cert-wrap{background:linear-gradient(135deg,var(--surface2),var(--surface));border:1px solid var(--border);border-radius:16px;padding:40px;text-align:center;margin:20px 0;}
+.cert-badge{font-size:44px;margin-bottom:12px;}
+.cert-wrap h2{font-size:22px;margin-bottom:8px;}
+.cert-wrap p{color:var(--text2);font-size:14px;}
+
+/* ── MOBILE ── */
+@media (max-width:900px){
+  #sidebar{transform:translateX(-100%);}
+  #sidebar.open{transform:translateX(0);}
+  #main{margin-left:0;}
+  #lesson{padding:32px 20px 100px;}
+  .lesson-title{font-size:24px;}
+  #sidebar.open + #scrim{display:block;}
+}
+
+/* ── STANDALONE ADDITIONS ── */
+#header-brand .brand-sub{font-style:normal;font-weight:600;color:var(--text2);}
+#scrim{display:none;position:fixed;top:var(--header-h);left:0;right:0;bottom:0;background:rgba(0,0,0,0.55);z-index:850;}
+.quiz-retake{margin-top:12px;}
+.dt-node.leaf.stop{border-color:rgba(239,68,68,0.4);background:rgba(239,68,68,0.06);color:#fca5a5;}
+.dt-col > .dt-branch{margin-top:10px;}
+#site-footer{max-width:820px;margin:0 auto;padding:24px 32px 40px;border-top:1px solid var(--border);font-size:12px;color:var(--text3);line-height:1.7;text-align:center;}
+#site-footer strong{color:var(--text2);font-weight:600;}
+.sb-chapter:focus-visible,.term-card-header:focus-visible,button:focus-visible{outline:2px solid var(--accent2);outline-offset:2px;}
+@media (max-width:640px){
+  .dt-branch{flex-direction:column;align-items:stretch;gap:14px;width:100%;}
+  .dt-col{width:100%;align-items:stretch;border-left:2px solid var(--border);padding-left:12px;}
+  .dt-col-label{text-align:left;}
+  .dt-line{display:none;}
+  .dt-node{max-width:none;width:100%;}
+  #lesson-nav{gap:10px;flex-wrap:wrap;}
+  #site-footer{padding:20px 20px 32px;}
+}
+@media (max-width:600px){
+  #progress-label{display:none;}
+  #progress-bar-outer{width:64px;}
+  #header-brand .brand-sub{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div id="header-left">
+    <button id="sidebar-toggle" type="button" aria-label="Toggle lesson menu">☰</button>
+    <div id="header-brand">AI <span>Foundations</span><em class="brand-sub">: Practical AI for Business</em></div>
+  </div>
+  <div id="progress-wrap">
+    <span id="progress-label">PROGRESS</span>
+    <div id="progress-bar-outer"><div id="progress-bar-inner" style="width:0%"></div></div>
+    <span id="progress-pct">0%</span>
+  </div>
+</div>
+
+<div id="layout">
+  <nav id="sidebar" aria-label="Lessons"></nav>
+  <div id="scrim"></div>
+  <main id="main">
+    <div id="lesson"></div>
+    <footer id="site-footer">
+      <div><strong>AI Foundations: Practical AI for Business</strong></div>
+      <div>Created by Daniel DeSandre · © 2026 Daniel DeSandre. All rights reserved.</div>
+      <div>Independent educational resource, not affiliated with or endorsed by any AI provider. Product names mentioned are trademarks of their respective owners.</div>
+      <div>No sign-up, no tracking. Your progress is stored only in this browser.</div>
+    </footer>
+  </main>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════
+//  LOCAL-ONLY PROGRESS
+//  Nothing is sent anywhere. No name, email, or identifier is collected.
+//  Uses its own storage key and never reads any other course's data.
+// ════════════════════════════════════════════════════════
+const LS_KEY = "aifpab.progress.v1";
+const PASS_PCT = 70;
+
+function freshState(){
+  return { currentLessonId: null, completedLessons: [], quizResults: {}, finalPassed: false, updatedAt: 0 };
+}
+function loadProgress(){
+  try {
+    const s = JSON.parse(localStorage.getItem(LS_KEY) || "null");
+    if(s && typeof s === "object" && Array.isArray(s.completedLessons)){
+      return {
+        currentLessonId: typeof s.currentLessonId === "string" ? s.currentLessonId : null,
+        completedLessons: s.completedLessons.filter(x => typeof x === "string"),
+        quizResults: (s.quizResults && typeof s.quizResults === "object") ? s.quizResults : {},
+        finalPassed: s.finalPassed === true,
+        updatedAt: Number(s.updatedAt) || 0
+      };
+    }
+  } catch(e){ /* storage unavailable or corrupt: start fresh */ }
+  return freshState();
+}
+function saveProgress(){
+  state.updatedAt = Date.now();
+  try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch(e){ /* private mode etc. — course still works */ }
+}
+function resetProgress(){
+  if(confirm("This will erase all saved progress on this browser, including completed lessons and quiz scores. Are you sure?")){
+    try { localStorage.removeItem(LS_KEY); } catch(e){}
+    location.reload();
+  }
+}
+const state = loadProgress();
+
+// ════════════════════════════════════════════════════════
+//  COURSE DATA — filled in below
+// ════════════════════════════════════════════════════════
+const COURSE = [
+  { unit: 0, title: "Welcome", chapters: [
+    { id:"0-0", num:0, title:"Welcome to AI Foundations", subtitle:"What this course covers, who it's for, and where it leads next.", content: buildWelcome() }
+  ]},
+  { unit: 1, title: "The Big Picture", chapters: [
+    { id:"1-1", num:1, title:"What Is AI, Really?", subtitle:"Cutting through the hype — what AI actually is, and the different types of AI you'll hear about.", content: buildL1_1() },
+    { id:"1-2", num:2, title:"Generative AI — The AI That Creates", subtitle:"Why ChatGPT and Claude feel so different from older AI, and what makes them 'generative.'", content: buildL1_2() }
+  ]},
+  { unit: 2, title: "How AI \"Thinks\"", chapters: [
+    { id:"2-1", num:3, title:"Large Language Models Explained", subtitle:"The engine behind Claude, ChatGPT, and Gemini — in plain English.", content: buildL2_1() },
+    { id:"2-2", num:4, title:"Tokens — The Building Blocks of AI Language", subtitle:"Why AI doesn't read words the way you do, and why that matters.", content: buildL2_2() },
+    { id:"2-3", num:5, title:"Why AI Sometimes Gets It Wrong", subtitle:"Hallucinations — what they are, why they happen, and how to spot them.", content: buildL2_3() }
+  ]},
+  { unit: 3, title: "Talking to AI", chapters: [
+    { id:"3-1", num:6, title:"Prompt Engineering — The Art of Asking Well", subtitle:"The difference between a vague question and a great one.", content: buildL3_1() }
+  ]},
+  { unit: 4, title: "AI That Acts", chapters: [
+    { id:"4-1", num:7, title:"AI Agents — When AI Takes Action", subtitle:"The leap from 'AI that answers' to 'AI that does.'", content: buildL4_1() },
+    { id:"4-2", num:8, title:"AI Workflows — Connecting the Pieces", subtitle:"How AI plugs into the tools you already use, step by step.", content: buildL4_2() }
+  ]},
+  { unit: 5, title: "Under the Hood", chapters: [
+    { id:"5-1", num:9, title:"APIs — How Apps Talk to AI", subtitle:"The invisible messenger that lets software ask AI for help.", content: buildL5_1() },
+    { id:"5-2", num:10, title:"RAG & Embeddings — How AI Finds Relevant Info", subtitle:"How AI answers questions about things it was never trained on.", content: buildL5_2() }
+  ]},
+  { unit: 6, title: "Staying Safe & Smart", chapters: [
+    { id:"6-1", num:11, title:"AI Safety & Privacy", subtitle:"What to know before you paste something into an AI chat.", content: buildL6_1() }
+  ]},
+  { unit: 7, title: "Speaking the Language", chapters: [
+    { id:"7-1", num:12, title:"Common AI Terminology", subtitle:"The vocabulary you'll hear again and again — all in one place.", content: buildL7_1() }
+  ]},
+  { unit: 8, title: "AI in the Real World", chapters: [
+    { id:"8-1", num:13, title:"Real-World AI Use Cases", subtitle:"Where AI is already working, across industries big and small.", content: buildL8_1() }
+  ]},
+  { unit: 9, title: "What's Next", chapters: [
+    { id:"9-1", num:14, title:"Your Path Forward", subtitle:"A recap of the essentials, a final knowledge check, and practical next steps.", content: buildL9_1() }
+  ]}
+];
+
+// ════════════════════════════════════════════════════════
+//  STATE + RENDER ENGINE
+// ════════════════════════════════════════════════════════
+const flatChapters = [];
+COURSE.forEach(u => u.chapters.forEach(c => flatChapters.push(c)));
+const VALID_IDS = new Set(flatChapters.map(c => c.id));
+const LAST_ID = flatChapters[flatChapters.length - 1].id;
+let completed = new Set(state.completedLessons.filter(id => VALID_IDS.has(id)));
+let currentId = null;
+
+const sidebarEl = document.getElementById("sidebar");
+const mainEl = document.getElementById("main");
+function isMobile(){ return window.matchMedia("(max-width:900px)").matches; }
+function toggleSidebar(){
+  if(isMobile()){ sidebarEl.classList.toggle("open"); }
+  else { sidebarEl.classList.toggle("hidden"); mainEl.classList.toggle("expanded"); }
+}
+function closeSidebarOnMobile(){ if(isMobile()) sidebarEl.classList.remove("open"); }
+
+function renderSidebar(){
+  sidebarEl.innerHTML = COURSE.map(unit => `
+    <div class="sb-unit">
+      <div class="sb-unit-header"><span class="sb-unit-num">${unit.unit}</span>${unit.title}</div>
+      ${unit.chapters.map(c => `
+        <div class="sb-chapter ${c.id===currentId?'active':''} ${completed.has(c.id)?'completed':''}" data-goto="${c.id}" role="button" tabindex="0" ${c.id===currentId?'aria-current="page"':''}>
+          <span class="sb-chapter-num">${c.num}</span>
+          <span>${c.title}</span>
+          <span class="sb-check" aria-label="${completed.has(c.id)?'Completed':'Not completed'}">${completed.has(c.id)?'●':'○'}</span>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+function updateProgressBar(){
+  const pct = Math.round((completed.size / flatChapters.length) * 100);
+  document.getElementById("progress-bar-inner").style.width = pct + "%";
+  document.getElementById("progress-pct").textContent = pct + "%";
+}
+
+function persistCompleted(){
+  state.completedLessons = Array.from(completed);
+  saveProgress();
+  updateProgressBar();
+}
+
+function goTo(id){
+  const idx = flatChapters.findIndex(c => c.id === id);
+  if(idx < 0) return;
+  currentId = id;
+  const ch = flatChapters[idx];
+  const unit = COURSE.find(u => u.chapters.some(c => c.id === id));
+  document.getElementById("lesson").innerHTML = `
+    <div class="lesson-unit-tag">Unit ${unit.unit} · ${unit.title}</div>
+    <div class="lesson-title">${ch.title}</div>
+    <div class="lesson-subtitle">${ch.subtitle}</div>
+    ${ch.content}
+    <div id="lesson-nav">
+      <button class="nav-btn" type="button" ${idx===0?'disabled':''} data-goto="${idx>0?flatChapters[idx-1].id:''}">← Previous</button>
+      <span class="chapter-progress">Lesson ${idx+1} of ${flatChapters.length}</span>
+      ${idx===flatChapters.length-1 ? '' : `<button class="nav-btn next" type="button" data-mark-complete="${id}" data-idx="${idx}">Mark Complete & Continue →</button>`}
+    </div>
+  `;
+  document.querySelectorAll("#lesson .term-card-header").forEach(h => { h.tabIndex = 0; h.setAttribute("role","button"); });
+  window.scrollTo(0,0);
+  renderSidebar();
+  initDiagrams();
+  restoreQuiz();
+  state.currentLessonId = id;
+  saveProgress();
+  closeSidebarOnMobile();
+}
+
+function markCompleteAndNext(id, idx){
+  if(!completed.has(id)){ completed.add(id); persistCompleted(); }
+  if(idx < flatChapters.length-1) goTo(flatChapters[idx+1].id);
+  else renderSidebar();
+}
+
+// ════════════════════════════════════════════════════════
+//  DIAGRAM ENGINE (step-through boxes/arrows)
+// ════════════════════════════════════════════════════════
+function initDiagrams(){
+  document.querySelectorAll('.diagram').forEach(dg => {
+    const steps = JSON.parse(dg.dataset.captions || "[]");
+    let step = 0;
+    const boxes = dg.querySelectorAll('.dg-box');
+    const arrows = dg.querySelectorAll('.dg-arrow');
+    const caption = dg.querySelector('.diagram-caption');
+    const dots = dg.querySelector('.dg-dots');
+    const prevBtn = dg.querySelector('.dg-prev');
+    const nextBtn = dg.querySelector('.dg-next');
+    if(caption) caption.setAttribute('aria-live','polite');
+    if(prevBtn){ prevBtn.type='button'; prevBtn.setAttribute('aria-label','Previous step'); }
+    if(nextBtn){ nextBtn.type='button'; nextBtn.setAttribute('aria-label','Next step'); }
+    if(dots){
+      dots.innerHTML = steps.map((_,i)=>`<div class="dg-dot ${i===0?'active':''}"></div>`).join('');
+    }
+    function render(){
+      boxes.forEach((b,i)=>{
+        b.classList.toggle('active', i===step);
+        b.classList.toggle('done', i<step);
+      });
+      arrows.forEach((a,i)=>{ a.classList.toggle('active', i<step); });
+      if(caption) caption.innerHTML = steps[step] || '';
+      if(dots) dots.querySelectorAll('.dg-dot').forEach((d,i)=>d.classList.toggle('active', i===step));
+      if(prevBtn) prevBtn.disabled = step===0;
+      if(nextBtn) nextBtn.disabled = step===boxes.length-1;
+    }
+    if(prevBtn) prevBtn.onclick = ()=>{ if(step>0){ step--; render(); } };
+    if(nextBtn) nextBtn.onclick = ()=>{ if(step<boxes.length-1){ step++; render(); } };
+    render();
+  });
+}
+
+// ════════════════════════════════════════════════════════
+//  TERM CARDS
+// ════════════════════════════════════════════════════════
+function toggleTerm(el){ el.classList.toggle('open'); }
+
+// ════════════════════════════════════════════════════════
+//  QUIZ ENGINE (results saved locally; restorable; retakeable)
+// ════════════════════════════════════════════════════════
+function selectOption(btn){
+  const q = btn.closest('.quiz-q');
+  q.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function getSelections(box){
+  return Array.from(box.querySelectorAll('.quiz-q')).map(q => {
+    const i = Array.from(q.querySelectorAll('.quiz-option')).findIndex(o => o.classList.contains('selected'));
+    return i < 0 ? null : i;
+  });
+}
+
+function gradeQuiz(box, selections){
+  const questions = Array.from(box.querySelectorAll('.quiz-q'));
+  let correctCount = 0;
+  questions.forEach((q, qi) => {
+    const options = Array.from(q.querySelectorAll('.quiz-option'));
+    options.forEach(o => { o.classList.remove('selected','correct','wrong'); o.classList.add('disabled'); });
+    const fb = q.querySelector('.quiz-feedback');
+    const s = selections[qi];
+    const selected = (typeof s === 'number') ? options[s] : null;
+    fb.style.display = 'block';
+    if(!selected){ fb.className='quiz-feedback wrong'; fb.textContent='No answer selected.'; return; }
+    selected.classList.add('selected');
+    if(selected.dataset.correct === 'true'){
+      correctCount++; selected.classList.add('correct');
+      fb.className='quiz-feedback correct'; fb.textContent='Correct!';
+    } else {
+      selected.classList.add('wrong');
+      const correctOpt = q.querySelector('.quiz-option[data-correct="true"]');
+      if(correctOpt) correctOpt.classList.add('correct');
+      fb.className='quiz-feedback wrong'; fb.textContent='Not quite — the highlighted answer is correct.';
+    }
+  });
+  const pct = Math.round((correctCount / questions.length) * 100);
+  const submit = box.querySelector('#quiz-submit');
+  const isFinal = submit && submit.dataset.final === 'true';
+  const result = box.querySelector('#quiz-result');
+  result.style.display = 'block';
+  result.className = pct >= PASS_PCT ? 'pass' : 'fail';
+  result.textContent = `You got ${correctCount} of ${questions.length} correct (${pct}%).`;
+  if(isFinal && pct < PASS_PCT) result.textContent += ` Score ${PASS_PCT}% or higher to complete the course. Review the lessons and retake the check when you're ready.`;
+  if(submit) submit.style.display = 'none';
+  if(!box.querySelector('.quiz-retake')){
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'nav-btn quiz-retake'; b.dataset.action = 'retake-quiz';
+    b.textContent = '↺ Retake Quiz';
+    result.after(b);
+  }
+  return { pct, correctCount, total: questions.length, isFinal };
+}
+
+function resetQuizBox(box){
+  box.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected','correct','wrong','disabled'));
+  box.querySelectorAll('.quiz-feedback').forEach(f => { f.style.display='none'; f.textContent=''; });
+  const r = box.querySelector('#quiz-result'); r.style.display='none'; r.className='quiz-result'; r.textContent='';
+  const s = box.querySelector('#quiz-submit'); if(s) s.style.display='';
+  const rt = box.querySelector('.quiz-retake'); if(rt) rt.remove();
+}
+
+function showCompletion(){
+  const s = document.getElementById('cert-section');
+  if(s) s.style.display = 'block';
+}
+
+function submitQuiz(box){
+  const selections = getSelections(box);
+  const r = gradeQuiz(box, selections);
+  state.quizResults[currentId] = { score: r.pct, correctCount: r.correctCount, total: r.total, selections, submittedAt: Date.now() };
+  if(r.isFinal && r.pct >= PASS_PCT){
+    state.finalPassed = true;
+    completed.add(currentId);
+    persistCompleted();
+    renderSidebar();
+    showCompletion();
+  } else {
+    saveProgress();
+  }
+}
+
+function restoreQuiz(){
+  const box = document.querySelector('#lesson .quiz-box');
+  const r = state.quizResults[currentId];
+  if(box && r && Array.isArray(r.selections)) gradeQuiz(box, r.selections);
+  if(currentId === LAST_ID && state.finalPassed) showCompletion();
+}
+
+// ════════════════════════════════════════════════════════
+//  GLOBAL EVENT DELEGATION (all dynamically-injected content)
+// ════════════════════════════════════════════════════════
+document.getElementById('sidebar-toggle').addEventListener('click', toggleSidebar);
+document.getElementById('scrim').addEventListener('click', closeSidebarOnMobile);
+
+document.addEventListener('click', function(e){
+  const gotoEl = e.target.closest('[data-goto]');
+  if(gotoEl){
+    const id = gotoEl.dataset.goto;
+    if(id) goTo(id);
+    return;
+  }
+  const markBtn = e.target.closest('[data-mark-complete]');
+  if(markBtn){
+    markCompleteAndNext(markBtn.dataset.markComplete, parseInt(markBtn.dataset.idx, 10));
+    return;
+  }
+  const optBtn = e.target.closest('.quiz-option');
+  if(optBtn && !optBtn.classList.contains('disabled')){
+    selectOption(optBtn);
+    return;
+  }
+  const submitBtn = e.target.closest('#quiz-submit');
+  if(submitBtn){
+    submitQuiz(submitBtn.closest('.quiz-box'));
+    return;
+  }
+  const retakeBtn = e.target.closest('[data-action="retake-quiz"]');
+  if(retakeBtn){
+    delete state.quizResults[currentId];
+    saveProgress();
+    resetQuizBox(retakeBtn.closest('.quiz-box'));
+    return;
+  }
+  const termHeader = e.target.closest('.term-card-header');
+  if(termHeader){
+    toggleTerm(termHeader.parentElement);
+    return;
+  }
+  const resetBtn = e.target.closest('[data-action="reset-progress"]');
+  if(resetBtn){
+    resetProgress();
+    return;
+  }
+});
+
+document.addEventListener('keydown', function(e){
+  if((e.key === 'Enter' || e.key === ' ') && e.target.matches('[role="button"][data-goto], .term-card-header')){
+    e.preventDefault();
+    e.target.click();
+  }
+});
+
+// ════════════════════════════════════════════════════════
+//  LESSON CONTENT FUNCTIONS
+// ════════════════════════════════════════════════════════
+function buildWelcome(){
+  return `
+  <div class="section">
+    <div class="section-label theory">👋 Start Here</div>
+    <p>AI is showing up everywhere right now — in the news, at work, in apps you already use. It's easy to feel like everyone else already understands it and you're behind. You're not. Most people using AI every day couldn't explain how it actually works either.</p>
+    <p>This course fixes that. In the next 14 short lessons, you'll build a clear, accurate mental model of what AI is, how it "thinks," and where it's already changing how businesses and people work — <strong>without writing a single line of code.</strong></p>
+    <h2>What You Won't Do Here</h2>
+    <p>No coding. No technical setup. No homework assignments. This course is about understanding, not building. Once the concepts click, the natural next steps are to <strong>practice</strong> with an AI assistant on real tasks from your own work, and then to <strong>build</strong> a small automation that connects AI to the tools you already use. Everything here sets you up for both.</p>
+
+    <div class="diagram" data-captions='["You are here — building the vocabulary and mental models that everything else depends on.","Practice: use an AI assistant on real, everyday tasks — drafting, summarizing, brainstorming — and check its work.","Build: connect AI to the tools you already use with a simple workflow, starting with one small, repetitive task."]'>
+      <div class="diagram-canvas">
+        <div class="dg-box"><div class="dg-icon">🧠</div><div class="dg-label">AI Foundations</div><div class="dg-sub">Understand</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">🛠️</div><div class="dg-label">Practice</div><div class="dg-sub">Apply</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">🚀</div><div class="dg-label">Build</div><div class="dg-sub">Automate</div></div>
+      </div>
+      <div class="diagram-caption"></div>
+      <div class="diagram-controls">
+        <button class="dg-nav-btn dg-prev">‹</button>
+        <div class="dg-dots"></div>
+        <button class="dg-nav-btn dg-next">›</button>
+      </div>
+    </div>
+
+    <div class="dyk">
+      <div class="dyk-icon">💡</div>
+      <div class="dyk-body"><span class="dyk-label">Did You Know?</span><p>The term "Artificial Intelligence" was coined in 1956 — about 70 years before AI tools became something anyone could use from their phone. The idea is old. The accessibility is brand new.</p></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label review">📌 How to Use This Course</div>
+    <div class="review-box">
+      <ul>
+        <li>Lessons build on each other — go in order the first time through.</li>
+        <li>Diagrams are interactive — click the arrows to step through them at your own pace.</li>
+        <li>Each lesson ends with a short knowledge check. It's low-stakes — it's there to help ideas stick, not to grade you.</li>
+        <li>Your progress saves automatically as you go. Come back anytime.</li>
+      </ul>
+    </div>
+    <div class="callout green">💾 Your progress is automatically saved on this browser so you can continue where you left off. No account needed — and it never leaves your device.</div>
+    <button class="nav-btn" type="button" data-action="reset-progress">Reset My Progress</button>
+  </div>
+
+  <div class="section">
+    <div class="section-label quiz">✅ Knowledge Check</div>
+    <div class="quiz-box" id="quiz-0-0">
+      <h3>🎯 Quick Check</h3>
+      <div class="quiz-q" id="q1">
+        <p>1. What is the main goal of AI Foundations?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">To teach you to write AI code</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="true">To build a clear understanding of AI concepts and terminology</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">To have you complete a coding capstone project</button>
+        </div>
+        <div class="quiz-feedback" id="fb-q1" style="display:none;"></div>
+      </div>
+      <div class="quiz-q" id="q2">
+        <p>2. Do you need to write code to complete this course?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">Yes — every lesson includes a programming exercise</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="true">No — it focuses on concepts and practical understanding, not programming</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">Only for the final knowledge check</button>
+        </div>
+        <div class="quiz-feedback" id="fb-q2" style="display:none;"></div>
+      </div>
+      <button id="quiz-submit" type="button">Submit Answers</button>
+      <div id="quiz-result" class="quiz-result"></div>
+    </div>
+  </div>
+  `;
+}
+
+function buildL1_1(){
+  return `
+  <div class="section">
+    <div class="section-label theory">📡 Theory</div>
+    <h2>What Is AI?</h2>
+    <p><strong>Artificial Intelligence (AI)</strong> is software that performs tasks which normally require human thinking — recognizing patterns, making predictions, understanding language, or generating new content. That's it. There's no ghost in the machine, no consciousness, no secret intelligence deciding things on its own. It's math, running on computers, trained on huge amounts of data.</p>
+    <p>The confusion usually comes from the word "intelligence" itself. AI doesn't understand the world the way you do. It's extremely good at recognizing patterns in data and producing useful output based on those patterns — which can look a lot like understanding, even when it isn't.</p>
+
+    <h2>Two Very Different Types of AI</h2>
+    <p>When people say "AI," they usually mean one of two very different things:</p>
+
+    <div class="diagram" data-captions='["Narrow AI: built for one specific job. A spam filter, a spell checker, a recommendation engine. This is nearly all AI in the world today.","General AI: a hypothetical AI that could learn and reason across any task the way a human can. This does not exist yet — despite how movies portray it."]'>
+      <div class="diagram-canvas">
+        <div class="dg-box"><div class="dg-icon">🎯</div><div class="dg-label">Narrow AI</div><div class="dg-sub">Exists today</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">🌌</div><div class="dg-label">General AI</div><div class="dg-sub">Still science fiction</div></div>
+      </div>
+      <div class="diagram-caption"></div>
+      <div class="diagram-controls"><button class="dg-nav-btn dg-prev">‹</button><div class="dg-dots"></div><button class="dg-nav-btn dg-next">›</button></div>
+    </div>
+
+    <h2>How AI Learns: Rules vs. Patterns</h2>
+    <p>Older software followed <strong>rules a programmer wrote by hand</strong> ("if the email contains this word, mark it as spam"). Modern AI mostly works differently — it uses <strong>machine learning</strong>, where the system is shown thousands or millions of examples and learns the patterns itself, without anyone writing explicit rules for every case.</p>
+    <ul>
+      <li><strong>Machine Learning (ML):</strong> AI that improves at a task by learning from data, rather than following hand-written rules.</li>
+      <li><strong>Deep Learning:</strong> A more powerful type of machine learning using structures loosely inspired by the brain (called neural networks). This is what powers today's most capable AI.</li>
+    </ul>
+
+    <div class="myth">
+      <div class="myth-label">⚠️ Common Misconception</div>
+      <div class="myth-row wrong"><span class="tag">MYTH</span><span>AI "thinks" and understands things the way a person does.</span></div>
+      <div class="myth-row right"><span class="tag">REALITY</span><span>AI recognizes statistical patterns in data. It can produce remarkably human-sounding results without any actual understanding or awareness behind them.</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label terms">📖 Terminology</div>
+    <div class="term-grid">
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Artificial Intelligence (AI)</span><span class="term-toggle">+</span></div><div class="term-body">Software that performs tasks normally associated with human thinking — recognizing patterns, making predictions, or generating content.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Narrow AI</span><span class="term-toggle">+</span></div><div class="term-body">AI designed to do one specific task well. Nearly all AI that exists today — including ChatGPT and Claude — is narrow AI.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Machine Learning (ML)</span><span class="term-toggle">+</span></div><div class="term-body">A way of building AI where the system learns patterns from examples, instead of being told explicit rules.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Neural Network</span><span class="term-toggle">+</span></div><div class="term-body">A machine learning structure loosely inspired by neurons in the brain — layers of simple math functions that together can recognize very complex patterns.</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label review">📌 Quick Review</div>
+    <div class="review-box">
+      <ul>
+        <li>AI is pattern-based software, not a thinking, conscious entity.</li>
+        <li>Narrow AI (task-specific) exists today. General AI (human-like across any task) does not.</li>
+        <li>Machine learning lets AI improve by learning from data instead of hand-written rules.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label quiz">✅ Knowledge Check</div>
+    <div class="quiz-box" id="quiz-1-1">
+      <h3>🎯 Quick Check</h3>
+      <div class="quiz-q" id="q1"><p>1. Which best describes "narrow AI"?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q1" data-correct="true">AI built to perform one specific task well</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">AI that can reason about any topic like a human</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">AI that is only available to a small group of companies</button>
+        </div><div class="quiz-feedback" id="fb-q1" style="display:none;"></div></div>
+      <div class="quiz-q" id="q2"><p>2. Does "General AI" (human-level AI across any task) exist today?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">Yes, ChatGPT and Claude are examples of it</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="true">No — it remains a hypothetical, not something that exists yet</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">Yes, but only in research labs, never publicly</button>
+        </div><div class="quiz-feedback" id="fb-q2" style="display:none;"></div></div>
+      <div class="quiz-q" id="q3"><p>3. What's the key difference between old rule-based software and machine learning?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q3" data-correct="false">Machine learning is always slower</button>
+          <button type="button" class="quiz-option" data-q="q3" data-correct="true">Machine learning finds patterns from data instead of following hand-written rules</button>
+          <button type="button" class="quiz-option" data-q="q3" data-correct="false">There is no real difference</button>
+        </div><div class="quiz-feedback" id="fb-q3" style="display:none;"></div></div>
+      <button id="quiz-submit" type="button">Submit Answers</button>
+      <div id="quiz-result" class="quiz-result"></div>
+    </div>
+  </div>
+  `;
+}
+
+function buildL1_2(){
+  return `
+  <div class="section">
+    <div class="section-label theory">📡 Theory</div>
+    <h2>Two Jobs AI Can Do</h2>
+    <p>Before ChatGPT, most AI you interacted with was making decisions <em>about</em> things — recommending a movie, filtering spam, approving a loan. It was <strong>predictive</strong>: given an input, predict a label or a number.</p>
+    <p><strong>Generative AI</strong> does something different: it creates brand-new content — text, images, audio, video, even code — that didn't exist before you asked for it.</p>
+
+    <div class="compare">
+      <div class="compare-col bad"><h4>Predictive AI</h4><p>"Is this email spam?" → Yes or No.<br>"Will this customer churn?" → 73% likely.</p></div>
+      <div class="compare-col good"><h4>Generative AI</h4><p>"Write me a follow-up email." → A brand-new paragraph.<br>"Draw a logo for my bakery." → A brand-new image.</p></div>
+    </div>
+
+    <h2>How It Creates Something New</h2>
+    <p>Generative AI tools are trained on enormous amounts of existing content — text, images, code. From that training, they learn the underlying patterns of how language, images, or sound are typically structured. When you give it a prompt, it uses those learned patterns to generate something new that fits what you asked for — not by copying and pasting from its training data, but by generating fresh output based on probability.</p>
+
+    <div class="diagram" data-captions='["You give the AI an instruction — this is called a prompt.","The model draws on patterns learned from its training to generate a response.","The result is brand-new content, generated on the spot — not retrieved from a database."]'>
+      <div class="diagram-canvas">
+        <div class="dg-box"><div class="dg-icon">✍️</div><div class="dg-label">Your Prompt</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">🧠</div><div class="dg-label">Generative Model</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">✨</div><div class="dg-label">New Output</div></div>
+      </div>
+      <div class="diagram-caption"></div>
+      <div class="diagram-controls"><button class="dg-nav-btn dg-prev">‹</button><div class="dg-dots"></div><button class="dg-nav-btn dg-next">›</button></div>
+    </div>
+
+    <div class="dyk">
+      <div class="dyk-icon">💡</div>
+      <div class="dyk-body"><span class="dyk-label">Did You Know?</span><p>Generative AI isn't limited to text. The same underlying idea powers AI image generators (like Midjourney), AI voice generators, and AI video tools — they're all predicting the "next most likely piece" of their respective medium.</p></div>
+    </div>
+
+    <div class="myth">
+      <div class="myth-label">⚠️ Common Misconception</div>
+      <div class="myth-row wrong"><span class="tag">MYTH</span><span>Generative AI is just copying and pasting from things it read online.</span></div>
+      <div class="myth-row right"><span class="tag">REALITY</span><span>It generates new combinations of words or pixels based on learned patterns — it's not searching and quoting a database of stored content.</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label review">📌 Quick Review</div>
+    <div class="review-box">
+      <ul>
+        <li>Predictive AI classifies or scores existing input. Generative AI creates brand-new content.</li>
+        <li>Generative tools work across text, images, audio, video, and code.</li>
+        <li>Output is newly generated based on learned patterns — not copied from stored examples.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label quiz">✅ Knowledge Check</div>
+    <div class="quiz-box" id="quiz-1-2">
+      <h3>🎯 Quick Check</h3>
+      <div class="quiz-q" id="q1"><p>1. What makes generative AI different from older, predictive AI?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q1" data-correct="true">It creates new content instead of just labeling or scoring existing input</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">It only works with numbers</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">It doesn't require any training data</button>
+        </div><div class="quiz-feedback" id="fb-q1" style="display:none;"></div></div>
+      <div class="quiz-q" id="q2"><p>2. When an AI image generator makes a picture, where does that image come from?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">It's pulled from a folder of pre-made pictures</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="true">It's newly generated based on patterns learned from training data</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">A human artist draws it on request behind the scenes</button>
+        </div><div class="quiz-feedback" id="fb-q2" style="display:none;"></div></div>
+      <button id="quiz-submit" type="button">Submit Answers</button>
+      <div id="quiz-result" class="quiz-result"></div>
+    </div>
+  </div>
+  `;
+}
+
+
+function buildL2_1(){
+  return `
+  <div class="section">
+    <div class="section-label theory">📡 Theory</div>
+    <h2>What Is a Large Language Model?</h2>
+    <p>A <strong>Large Language Model (LLM)</strong> is the type of AI behind Claude, ChatGPT, and Gemini. It's trained on a huge amount of text — books, websites, articles, conversations — to learn the patterns of how language works.</p>
+    <p>Here's the mental model worth holding onto: <strong>an LLM is a very sophisticated autocomplete.</strong> When you type a message, it isn't looking up a stored answer. It's predicting, one small piece at a time, what text is most likely to come next — based on everything it learned during training.</p>
+
+    <div class="diagram" data-captions='["You send a message: \\"The capital of France is\\"","The model considers thousands of possible next words, each with a likelihood score.","It picks the most probable one — \\"Paris\\" — and repeats this process to build the full response, word by word."]'>
+      <div class="diagram-canvas">
+        <div class="dg-box"><div class="dg-icon">💬</div><div class="dg-label">Your Message</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">🎲</div><div class="dg-label">Probability Guess</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">📝</div><div class="dg-label">Next Word Chosen</div></div>
+      </div>
+      <div class="diagram-caption"></div>
+      <div class="diagram-controls"><button class="dg-nav-btn dg-prev">‹</button><div class="dg-dots"></div><button class="dg-nav-btn dg-next">›</button></div>
+    </div>
+
+    <p>This single ability — done at a massive scale, with billions of internal parameters — produces something that can write, summarize, explain, translate, and hold a conversation.</p>
+
+    <h2>Why the Same Question Can Get Different Answers</h2>
+    <p>Because an LLM works by probability rather than lookup, asking the same question twice can produce slightly different wording each time. It isn't being inconsistent on purpose — it's sampling from a range of likely responses rather than retrieving one fixed answer.</p>
+
+    <div class="dyk">
+      <div class="dyk-icon">💡</div>
+      <div class="dyk-body"><span class="dyk-label">Did You Know?</span><p>Today's largest language models have hundreds of billions of internal "parameters" — and some are estimated to have even more — the adjustable values the model tunes during training to get better at predicting language. More parameters generally means more nuanced pattern recognition, though it's not the only factor in how capable a model is.</p></div>
+    </div>
+
+    <div class="myth">
+      <div class="myth-label">⚠️ Common Misconception</div>
+      <div class="myth-row wrong"><span class="tag">MYTH</span><span>An LLM is basically a search engine that looks up facts.</span></div>
+      <div class="myth-row right"><span class="tag">REALITY</span><span>It generates a statistically likely response. It often happens to be factually correct, but it isn't consulting a verified database when it answers.</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label terms">📖 Terminology</div>
+    <div class="term-grid">
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Large Language Model (LLM)</span><span class="term-toggle">+</span></div><div class="term-body">An AI model trained on massive amounts of text to predict and generate human-like language. Examples: Claude, GPT (the models behind ChatGPT), Gemini.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Training Data</span><span class="term-toggle">+</span></div><div class="term-body">The huge collection of text the model learned from before it was ever released to the public.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Parameters</span><span class="term-toggle">+</span></div><div class="term-body">The internal, adjustable values a model tunes during training. Roughly speaking, more parameters allow for more nuanced patterns to be learned.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Foundation Model</span><span class="term-toggle">+</span></div><div class="term-body">A large, general-purpose AI model (like Claude, GPT, or Gemini) trained once on broad data, which can then be used for many different tasks.</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label review">📌 Quick Review</div>
+    <div class="review-box"><ul>
+      <li>LLMs predict the next likely piece of text — they don't retrieve stored answers.</li>
+      <li>This is why the same prompt can yield slightly different wording each time.</li>
+      <li>Claude, GPT, and Gemini are all examples of large language models.</li>
+    </ul></div>
+  </div>
+
+  <div class="section">
+    <div class="section-label quiz">✅ Knowledge Check</div>
+    <div class="quiz-box" id="quiz-2-1">
+      <h3>🎯 Quick Check</h3>
+      <div class="quiz-q" id="q1"><p>1. What is an LLM actually doing when it responds to you?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">Searching a database for the exact answer</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="true">Predicting the most likely next piece of text, one step at a time</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">Running a fixed set of if/then rules</button>
+        </div><div class="quiz-feedback" id="fb-q1" style="display:none;"></div></div>
+      <div class="quiz-q" id="q2"><p>2. Why might an LLM give slightly different wording to the same question asked twice?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">It's a bug that should never happen</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="true">It's sampling from a range of likely responses, not retrieving one fixed answer</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">It secretly remembers you asked before and changes its answer to seem smarter</button>
+        </div><div class="quiz-feedback" id="fb-q2" style="display:none;"></div></div>
+      <div class="quiz-q" id="q3"><p>3. Which of these is an example of a large language model?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q3" data-correct="false">Microsoft Excel</button>
+          <button type="button" class="quiz-option" data-q="q3" data-correct="true">Claude</button>
+          <button type="button" class="quiz-option" data-q="q3" data-correct="false">Google Chrome</button>
+        </div><div class="quiz-feedback" id="fb-q3" style="display:none;"></div></div>
+      <button id="quiz-submit" type="button">Submit Answers</button>
+      <div id="quiz-result" class="quiz-result"></div>
+    </div>
+  </div>
+  `;
+}
+
+function buildL2_2(){
+  return `
+  <div class="section">
+    <div class="section-label theory">📡 Theory</div>
+    <h2>AI Doesn't Read Words — It Reads Tokens</h2>
+    <p>When you type a sentence, you see words. An LLM sees <strong>tokens</strong> — small chunks of text that might be a whole word, part of a word, or a punctuation mark. "Tokenization" is a common word, but a model might actually process it as two pieces: "token" and "ization."</p>
+
+    <div class="diagram" data-captions='["Start with a normal sentence, the way you&#39;d read it.","The model breaks it into tokens — small chunks, not always whole words.","Each token gets converted into a number the model can actually do math with."]'>
+      <div class="diagram-canvas">
+        <div class="dg-box"><div class="dg-icon">📄</div><div class="dg-label">\"Tokenization is neat\"</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">🧩</div><div class="dg-label">Token · ization · is · neat</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">🔢</div><div class="dg-label">Numbers the Model Uses</div></div>
+      </div>
+      <div class="diagram-caption"></div>
+      <div class="diagram-controls"><button class="dg-nav-btn dg-prev">‹</button><div class="dg-dots"></div><button class="dg-nav-btn dg-next">›</button></div>
+    </div>
+
+    <h2>Why This Actually Matters to You</h2>
+    <ul>
+      <li><strong>Cost:</strong> Many AI tools charge based on the number of tokens processed — both what you type and what the AI generates.</li>
+      <li><strong>Limits:</strong> Every model has a maximum number of tokens it can handle at once, called its context window (more on that later). Go over it, and older content gets pushed out or cut off.</li>
+      <li><strong>Speed:</strong> More tokens generally means more processing time.</li>
+    </ul>
+
+    <div class="dyk">
+      <div class="dyk-icon">💡</div>
+      <div class="dyk-body"><span class="dyk-label">Did You Know?</span><p>A useful rule of thumb: 1 token ≈ 0.75 English words. So a 1,000-word document is roughly 1,300 tokens. This is why AI pricing and limits are almost always described in tokens, not words.</p></div>
+    </div>
+
+    <div class="myth">
+      <div class="myth-label">⚠️ Common Misconception</div>
+      <div class="myth-row wrong"><span class="tag">MYTH</span><span>Tokens are basically the same thing as words.</span></div>
+      <div class="myth-row right"><span class="tag">REALITY</span><span>Tokens are chunks of text — sometimes a whole word, sometimes just a piece of one. Short common words are often a single token; longer or unusual words get split into several.</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label review">📌 Quick Review</div>
+    <div class="review-box"><ul>
+      <li>Tokens are the small text chunks AI models actually process — not full words.</li>
+      <li>Cost, speed, and limits are all measured in tokens.</li>
+      <li>1 token is roughly 0.75 words on average.</li>
+    </ul></div>
+  </div>
+
+  <div class="section">
+    <div class="section-label quiz">✅ Knowledge Check</div>
+    <div class="quiz-box" id="quiz-2-2">
+      <h3>🎯 Quick Check</h3>
+      <div class="quiz-q" id="q1"><p>1. What is a token?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">Always exactly one full word</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="true">A small chunk of text — a word, part of a word, or punctuation</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">A unit of time the model takes to respond</button>
+        </div><div class="quiz-feedback" id="fb-q1" style="display:none;"></div></div>
+      <div class="quiz-q" id="q2"><p>2. Roughly how many words is 1,000 tokens?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">About 100 words</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="true">About 750 words</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">About 5,000 words</button>
+        </div><div class="quiz-feedback" id="fb-q2" style="display:none;"></div></div>
+      <button id="quiz-submit" type="button">Submit Answers</button>
+      <div id="quiz-result" class="quiz-result"></div>
+    </div>
+  </div>
+  `;
+}
+
+function buildL2_3(){
+  return `
+  <div class="section">
+    <div class="section-label theory">📡 Theory</div>
+    <h2>What Is a Hallucination?</h2>
+    <p>An AI <strong>hallucination</strong> is when a model confidently states something that's false, made up, or inconsistent — a fabricated statistic, an incorrect date, a citation that doesn't exist. It happens because the model is generating the most statistically likely-sounding text, not verifying facts against a trusted source.</p>
+
+    <div class="diagram" data-captions='["You ask a question the model wasn&#39;t trained with reliable information about.","Instead of saying \\"I don&#39;t know,\\" it generates the most plausible-sounding answer it can.","The result can sound completely confident — and be completely wrong."]'>
+      <div class="diagram-canvas">
+        <div class="dg-box"><div class="dg-icon">❓</div><div class="dg-label">Uncertain Question</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">🎲</div><div class="dg-label">Plausible Guess Generated</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">⚠️</div><div class="dg-label">Confident, Possibly Wrong Answer</div></div>
+      </div>
+      <div class="diagram-caption"></div>
+      <div class="diagram-controls"><button class="dg-nav-btn dg-prev">‹</button><div class="dg-dots"></div><button class="dg-nav-btn dg-next">›</button></div>
+    </div>
+
+    <h2>Where Hallucinations Show Up Most</h2>
+    <ul>
+      <li>Fabricated citations, links, or statistics that sound legitimate but don't exist</li>
+      <li>Wrong dates, version numbers, or specific details on niche topics</li>
+      <li>Confident answers on obscure or highly specialized subjects</li>
+      <li>Made-up details when asked about very recent events past the model's training cutoff</li>
+    </ul>
+
+    <div class="compare">
+      <div class="compare-col bad"><h4>Risky Habit</h4><p>Copying an AI-generated statistic or citation straight into a report without checking it.</p></div>
+      <div class="compare-col good"><h4>Better Habit</h4><p>Treating AI output as a strong first draft, then verifying any specific facts, numbers, or sources before relying on them.</p></div>
+    </div>
+
+    <div class="dyk">
+      <div class="dyk-icon">💡</div>
+      <div class="dyk-body"><span class="dyk-label">Did You Know?</span><p>Hallucinations can be reduced — grounding the model with real reference material, asking it to cite its reasoning, and adding a human review step all help — but no current AI model eliminates them entirely.</p></div>
+    </div>
+
+    <div class="myth">
+      <div class="myth-label">⚠️ Common Misconception</div>
+      <div class="myth-row wrong"><span class="tag">MYTH</span><span>AI hallucinations mean the AI is lying to you on purpose.</span></div>
+      <div class="myth-row right"><span class="tag">REALITY</span><span>There's no intent behind it. The model is generating plausible text without a built-in way to verify truth — it doesn't "know" it's wrong.</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label review">📌 Quick Review</div>
+    <div class="review-box"><ul>
+      <li>Hallucinations are confident-sounding but false or fabricated AI output.</li>
+      <li>They happen because models generate plausible text, not verified facts.</li>
+      <li>Always verify specific facts, numbers, and sources before relying on them.</li>
+    </ul></div>
+  </div>
+
+  <div class="section">
+    <div class="section-label quiz">✅ Knowledge Check</div>
+    <div class="quiz-box" id="quiz-2-3">
+      <h3>🎯 Quick Check</h3>
+      <div class="quiz-q" id="q1"><p>1. What is an AI "hallucination"?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">A visual glitch in an AI image generator</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="true">Confident but false or fabricated output from the model</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">A warning message the AI shows when it's unsure</button>
+        </div><div class="quiz-feedback" id="fb-q1" style="display:none;"></div></div>
+      <div class="quiz-q" id="q2"><p>2. What's the best practice when an AI gives you a specific statistic or citation?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">Trust it completely — AI models don't make mistakes on facts</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="true">Verify it independently before relying on it</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">Assume it's always fabricated and ignore it</button>
+        </div><div class="quiz-feedback" id="fb-q2" style="display:none;"></div></div>
+      <div class="quiz-q" id="q3"><p>3. Why do hallucinations happen?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q3" data-correct="false">The AI intentionally deceives users</button>
+          <button type="button" class="quiz-option" data-q="q3" data-correct="true">The model generates statistically plausible text without verifying it against facts</button>
+          <button type="button" class="quiz-option" data-q="q3" data-correct="false">The internet connection was too slow</button>
+        </div><div class="quiz-feedback" id="fb-q3" style="display:none;"></div></div>
+      <button id="quiz-submit" type="button">Submit Answers</button>
+      <div id="quiz-result" class="quiz-result"></div>
+    </div>
+  </div>
+  `;
+}
+
+
+function buildL3_1(){
+  return `
+  <div class="section">
+    <div class="section-label theory">📡 Theory</div>
+    <h2>Why the Way You Ask Matters</h2>
+    <p><strong>Prompt engineering</strong> is simply the practice of writing clear, well-structured instructions to get better results from an AI. It's not a technical skill reserved for programmers — it's closer to learning how to delegate clearly to a very capable but literal-minded new team member.</p>
+    <p>A vague request gets a vague, generic answer. A specific, well-structured request gets a sharp, useful one. The AI isn't reading your mind — it's working entirely from what you actually wrote.</p>
+
+    <div class="compare">
+      <div class="compare-col bad"><h4>Vague Prompt</h4><p>"Write something about my business."<br><em>Result: generic, unfocused, could apply to any business.</em></p></div>
+      <div class="compare-col good"><h4>Clear Prompt</h4><p>"Write a 3-sentence Instagram caption announcing our new weekend hours for a family-owned bakery, friendly and upbeat tone."<br><em>Result: specific, usable, on-brand.</em></p></div>
+    </div>
+
+    <h2>Four Ingredients of a Strong Prompt</h2>
+    <p>You don't need a formula memorized word-for-word, but most great prompts include some mix of these four elements:</p>
+
+    <div class="diagram" data-captions='["Role: who should the AI act as? (\\"You are a marketing copywriter.\\")","Context: what background does it need? (\\"For a bakery that just added weekend hours.\\")","Task: what exactly do you want done? (\\"Write an Instagram caption.\\")","Format: how should the output look? (\\"3 sentences, upbeat tone, one emoji.\\")"]'>
+      <div class="diagram-canvas">
+        <div class="dg-box"><div class="dg-icon">🎭</div><div class="dg-label">Role</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">🗂️</div><div class="dg-label">Context</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">🎯</div><div class="dg-label">Task</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">📐</div><div class="dg-label">Format</div></div>
+      </div>
+      <div class="diagram-caption"></div>
+      <div class="diagram-controls"><button class="dg-nav-btn dg-prev">‹</button><div class="dg-dots"></div><button class="dg-nav-btn dg-next">›</button></div>
+    </div>
+
+    <p>You don't always need all four in every prompt — but when a response comes back weak or generic, it's almost always because one of these was missing or unclear.</p>
+
+    <div class="dyk">
+      <div class="dyk-icon">💡</div>
+      <div class="dyk-body"><span class="dyk-label">Did You Know?</span><p>You can ask an AI to critique or improve your own prompt before you use it — "Is this a clear instruction? What's missing?" is itself a perfectly good prompt.</p></div>
+    </div>
+
+    <div class="myth">
+      <div class="myth-label">⚠️ Common Misconception</div>
+      <div class="myth-row wrong"><span class="tag">MYTH</span><span>There's one secret "magic phrase" that unlocks better AI answers.</span></div>
+      <div class="myth-row right"><span class="tag">REALITY</span><span>Good prompting is about clarity and specificity, not secret phrases. Give the AI what a thoughtful human assistant would also need to do the job well.</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label review">📌 Quick Review</div>
+    <div class="review-box"><ul>
+      <li>Prompt engineering is writing clear instructions to get better AI results.</li>
+      <li>Strong prompts often include role, context, task, and format.</li>
+      <li>Vague prompts produce vague answers — specificity is the biggest lever you have.</li>
+    </ul></div>
+  </div>
+
+  <div class="section">
+    <div class="section-label quiz">✅ Knowledge Check</div>
+    <div class="quiz-box" id="quiz-3-1">
+      <h3>🎯 Quick Check</h3>
+      <div class="quiz-q" id="q1"><p>1. What is prompt engineering?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">A programming language used to build AI models</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="true">The practice of writing clear, well-structured instructions to get better AI results</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">A setting that controls how fast the AI responds</button>
+        </div><div class="quiz-feedback" id="fb-q1" style="display:none;"></div></div>
+      <div class="quiz-q" id="q2"><p>2. Why does a vague prompt usually produce a weak answer?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q2" data-correct="true">The AI has no clear guidance, so it defaults to something generic</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">Vague prompts always break the AI</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">The AI intentionally gives worse answers to short prompts</button>
+        </div><div class="quiz-feedback" id="fb-q2" style="display:none;"></div></div>
+      <div class="quiz-q" id="q3"><p>3. Which of these is NOT one of the four common prompt ingredients discussed?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q3" data-correct="false">Role</button>
+          <button type="button" class="quiz-option" data-q="q3" data-correct="false">Format</button>
+          <button type="button" class="quiz-option" data-q="q3" data-correct="true">Password</button>
+        </div><div class="quiz-feedback" id="fb-q3" style="display:none;"></div></div>
+      <button id="quiz-submit" type="button">Submit Answers</button>
+      <div id="quiz-result" class="quiz-result"></div>
+    </div>
+  </div>
+  `;
+}
+
+function buildL4_1(){
+  return `
+  <div class="section">
+    <div class="section-label theory">📡 Theory</div>
+    <h2>From Answering to Acting</h2>
+    <p>A regular AI chatbot answers questions in a conversation — you ask, it replies, the interaction ends there. An <strong>AI agent</strong> goes a step further: it can take actions to accomplish a goal, often using tools along the way — checking a calendar, sending an email, searching the web, updating a spreadsheet — usually with minimal step-by-step guidance from you.</p>
+    <p>The difference isn't intelligence — it's autonomy and access to tools. A chatbot talks. An agent does.</p>
+
+    <h2>The Agent Loop</h2>
+    <p>Most AI agents follow a repeating cycle:</p>
+
+    <div class="diagram" data-captions='["Perceive: the agent takes in the current situation — your request, plus any relevant data.","Reason: it decides what steps are needed to accomplish the goal.","Act: it takes an action — using a tool, calling an API, sending a message.","Observe: it checks the result, then loops back to reasoning if more steps are needed."]'>
+      <div class="diagram-canvas">
+        <div class="dg-box"><div class="dg-icon">👀</div><div class="dg-label">Perceive</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">🤔</div><div class="dg-label">Reason</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">⚡</div><div class="dg-label">Act</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">🔍</div><div class="dg-label">Observe</div></div>
+      </div>
+      <div class="diagram-caption"></div>
+      <div class="diagram-controls"><button class="dg-nav-btn dg-prev">‹</button><div class="dg-dots"></div><button class="dg-nav-btn dg-next">›</button></div>
+    </div>
+
+    <h2>A Real Example</h2>
+    <p>Imagine a small business's AI scheduling assistant: a customer messages asking to book an appointment. A simple chatbot might just reply with the business hours. An <strong>agent</strong> can check the actual calendar for open slots, propose a time, and — once confirmed — create the calendar event and send a confirmation, all without a human doing the scheduling by hand.</p>
+
+    <div class="dyk">
+      <div class="dyk-icon">💡</div>
+      <div class="dyk-body"><span class="dyk-label">Did You Know?</span><p>Agents are usually given a defined, limited set of tools they're allowed to use — this keeps them safely scoped to the tasks you actually want automated, instead of freely doing anything at all.</p></div>
+    </div>
+
+    <div class="myth">
+      <div class="myth-label">⚠️ Common Misconception</div>
+      <div class="myth-row wrong"><span class="tag">MYTH</span><span>AI agents are physical robots.</span></div>
+      <div class="myth-row right"><span class="tag">REALITY</span><span>An AI agent is software — it takes digital actions (sending messages, updating records, calling APIs), not physical ones. It has no body.</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label review">📌 Quick Review</div>
+    <div class="review-box"><ul>
+      <li>Chatbots converse. Agents take action toward a goal.</li>
+      <li>The agent loop: perceive, reason, act, observe — repeating as needed.</li>
+      <li>Agents are typically limited to a defined set of tools for safety and predictability.</li>
+    </ul></div>
+  </div>
+
+  <div class="section">
+    <div class="section-label quiz">✅ Knowledge Check</div>
+    <div class="quiz-box" id="quiz-4-1">
+      <h3>🎯 Quick Check</h3>
+      <div class="quiz-q" id="q1"><p>1. What's the key difference between a chatbot and an AI agent?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">Agents are always faster</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="true">Agents can take actions using tools, not just reply in conversation</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">Chatbots are more accurate than agents</button>
+        </div><div class="quiz-feedback" id="fb-q1" style="display:none;"></div></div>
+      <div class="quiz-q" id="q2"><p>2. What are the four steps of the typical agent loop?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q2" data-correct="true">Perceive, reason, act, observe</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">Login, search, click, logout</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">Train, test, deploy, monitor</button>
+        </div><div class="quiz-feedback" id="fb-q2" style="display:none;"></div></div>
+      <div class="quiz-q" id="q3"><p>3. Are AI agents physical robots?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q3" data-correct="false">Yes, always</button>
+          <button type="button" class="quiz-option" data-q="q3" data-correct="true">No — they're software taking digital actions</button>
+          <button type="button" class="quiz-option" data-q="q3" data-correct="false">Only the advanced ones</button>
+        </div><div class="quiz-feedback" id="fb-q3" style="display:none;"></div></div>
+      <button id="quiz-submit" type="button">Submit Answers</button>
+      <div id="quiz-result" class="quiz-result"></div>
+    </div>
+  </div>
+  `;
+}
+
+function buildL4_2(){
+  return `
+  <div class="section">
+    <div class="section-label theory">📡 Theory</div>
+    <h2>AI Rarely Works Alone</h2>
+    <p>In real use, AI is usually one step inside a larger <strong>workflow</strong> — a sequence of connected steps that starts with a trigger, does something with AI in the middle, and ends with an action in another tool. Think of it as a digital assembly line, where AI is one of the stations.</p>
+
+    <div class="diagram" data-captions='["Trigger: something happens that starts the workflow — a new email, a form submission, a scheduled time.","AI Step: the AI reads, analyzes, drafts, or decides something based on that trigger.","Action: the result gets sent somewhere useful — an inbox, a calendar, a spreadsheet, a text message."]'>
+      <div class="diagram-canvas">
+        <div class="dg-box"><div class="dg-icon">⚡</div><div class="dg-label">Trigger</div><div class="dg-sub">New form submitted</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">🧠</div><div class="dg-label">AI Step</div><div class="dg-sub">Draft a reply</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">📤</div><div class="dg-label">Action</div><div class="dg-sub">Send email</div></div>
+      </div>
+      <div class="diagram-caption"></div>
+      <div class="diagram-controls"><button class="dg-nav-btn dg-prev">‹</button><div class="dg-dots"></div><button class="dg-nav-btn dg-next">›</button></div>
+    </div>
+
+    <h2>Why Workflows Matter More Than the AI Itself</h2>
+    <p>A brilliant AI model that isn't connected to anything is just a chat window. The real value most businesses get from AI comes from wiring it into their existing tools — email, calendars, CRMs, spreadsheets — so it can act on real information without someone manually copying and pasting between systems.</p>
+    <p>Automation tools such as Zapier, Make, and n8n exist specifically to build these connections without custom software development — and a small workflow is a great first hands-on project once you finish this course.</p>
+
+    <div class="dyk">
+      <div class="dyk-icon">💡</div>
+      <div class="dyk-body"><span class="dyk-label">Did You Know?</span><p>Workflows can include more than one AI step, and can branch — for example, checking if a message matches certain criteria before deciding what happens next.</p></div>
+    </div>
+
+    <div class="myth">
+      <div class="myth-label">⚠️ Common Misconception</div>
+      <div class="myth-row wrong"><span class="tag">MYTH</span><span>Setting up an AI workflow requires learning to code.</span></div>
+      <div class="myth-row right"><span class="tag">REALITY</span><span>Modern workflow tools are largely visual and no-code — you connect blocks representing triggers, AI steps, and actions, rather than writing programs from scratch.</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label review">📌 Quick Review</div>
+    <div class="review-box"><ul>
+      <li>A workflow connects a trigger → an AI step → an action in another tool.</li>
+      <li>Most real-world AI value comes from these connections, not the AI model alone.</li>
+      <li>No-code automation tools let you build these workflows visually.</li>
+    </ul></div>
+  </div>
+
+  <div class="section">
+    <div class="section-label quiz">✅ Knowledge Check</div>
+    <div class="quiz-box" id="quiz-4-2">
+      <h3>🎯 Quick Check</h3>
+      <div class="quiz-q" id="q1"><p>1. What starts a workflow?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q1" data-correct="true">A trigger — something that happens, like a new form submission</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">The AI deciding on its own to begin</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">A programmer manually running code each time</button>
+        </div><div class="quiz-feedback" id="fb-q1" style="display:none;"></div></div>
+      <div class="quiz-q" id="q2"><p>2. Where does most of the real-world value of AI usually come from?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">The AI chat window alone, disconnected from other tools</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="true">Connecting AI into workflows with real tools like email and calendars</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">Making the AI model bigger</button>
+        </div><div class="quiz-feedback" id="fb-q2" style="display:none;"></div></div>
+      <button id="quiz-submit" type="button">Submit Answers</button>
+      <div id="quiz-result" class="quiz-result"></div>
+    </div>
+  </div>
+  `;
+}
+
+
+function buildL5_1(){
+  return `
+  <div class="section">
+    <div class="section-label theory">📡 Theory</div>
+    <h2>The Waiter, Not the Kitchen</h2>
+    <p>An <strong>API (Application Programming Interface)</strong> is how one piece of software asks another piece of software to do something — without needing to know how it works internally. A helpful analogy: you (the app) don't walk into the kitchen (the AI model) and cook yourself. You tell the waiter (the API) what you want, and it brings back the result.</p>
+    <p>Every time an app — a chatbot on a website, a scheduling tool, a customer service widget — uses AI behind the scenes, it's very likely sending a request through an API to a model like Claude or GPT, then displaying whatever comes back.</p>
+
+    <div class="diagram" data-captions='["An app (like a website chat widget) needs an AI response.","It sends a request through the API — the message, described in a way the AI provider understands.","The AI model processes the request.","The API sends the response back to the app, which displays it to you."]'>
+      <div class="diagram-canvas">
+        <div class="dg-box"><div class="dg-icon">💻</div><div class="dg-label">App</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">🔌</div><div class="dg-label">API</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">🧠</div><div class="dg-label">AI Model</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">↩️</div><div class="dg-label">Response Back</div></div>
+      </div>
+      <div class="diagram-caption"></div>
+      <div class="diagram-controls"><button class="dg-nav-btn dg-prev">‹</button><div class="dg-dots"></div><button class="dg-nav-btn dg-next">›</button></div>
+    </div>
+
+    <p>You never see this exchange directly — it happens in the background, usually in a fraction of a second. But understanding that it's happening explains a lot: why AI features sometimes have a small delay, why some tools cost money to run, and why businesses can add "AI-powered" features to their own apps without building an AI model themselves.</p>
+
+    <div class="dyk">
+      <div class="dyk-icon">💡</div>
+      <div class="dyk-body"><span class="dyk-label">Did You Know?</span><p>You don't need to know how to code to use APIs anymore. No-code automation platforms let you connect to AI APIs visually, without writing a single line of programming.</p></div>
+    </div>
+
+    <div class="myth">
+      <div class="myth-label">⚠️ Common Misconception</div>
+      <div class="myth-row wrong"><span class="tag">MYTH</span><span>Every company with an "AI-powered" app built and trained their own AI model.</span></div>
+      <div class="myth-row right"><span class="tag">REALITY</span><span>Most apps you use are simply calling an existing model — like Claude or GPT — through an API, not building AI from scratch.</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label review">📌 Quick Review</div>
+    <div class="review-box"><ul>
+      <li>An API lets one piece of software request something from another without needing to know its internals.</li>
+      <li>Most "AI-powered" apps are calling an existing model's API, not building their own AI.</li>
+      <li>This all happens in the background, usually in under a second.</li>
+    </ul></div>
+  </div>
+
+  <div class="section">
+    <div class="section-label quiz">✅ Knowledge Check</div>
+    <div class="quiz-box" id="quiz-5-1">
+      <h3>🎯 Quick Check</h3>
+      <div class="quiz-q" id="q1"><p>1. What does an API let one piece of software do?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q1" data-correct="true">Request something from another piece of software without needing to know how it works internally</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">Physically connect two computers with a cable</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">Train a new AI model from scratch</button>
+        </div><div class="quiz-feedback" id="fb-q1" style="display:none;"></div></div>
+      <div class="quiz-q" id="q2"><p>2. When an app says it's "AI-powered," what's usually happening?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">The company built their own AI model from the ground up</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="true">The app is calling an existing AI model's API</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">A human is answering behind the scenes</button>
+        </div><div class="quiz-feedback" id="fb-q2" style="display:none;"></div></div>
+      <button id="quiz-submit" type="button">Submit Answers</button>
+      <div id="quiz-result" class="quiz-result"></div>
+    </div>
+  </div>
+  `;
+}
+
+function buildL5_2(){
+  return `
+  <div class="section">
+    <div class="section-label theory">📡 Theory</div>
+    <h2>The Problem: AI Doesn't Know Your Business</h2>
+    <p>An LLM only knows what it learned during training — it has no idea about your company's specific documents, your product catalog, or last week's meeting notes. <strong>RAG (Retrieval-Augmented Generation)</strong> is the concept that solves this: before the AI answers, the system first retrieves relevant information from your own data, then hands both the question <em>and</em> that retrieved information to the AI to generate an informed answer.</p>
+
+    <div class="diagram" data-captions='["A question comes in that requires specific, private, or recent information.","The system searches your own knowledge base for the most relevant matching information.","That retrieved information is combined with your original question.","The AI generates an answer grounded in your actual data — not just its general training."]'>
+      <div class="diagram-canvas">
+        <div class="dg-box"><div class="dg-icon">❓</div><div class="dg-label">Question</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">🔎</div><div class="dg-label">Search Your Data</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">🧩</div><div class="dg-label">Combine + Send to AI</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">✅</div><div class="dg-label">Grounded Answer</div></div>
+      </div>
+      <div class="diagram-caption"></div>
+      <div class="diagram-controls"><button class="dg-nav-btn dg-prev">‹</button><div class="dg-dots"></div><button class="dg-nav-btn dg-next">›</button></div>
+    </div>
+
+    <h2>How the "Search" Part Actually Works: Embeddings</h2>
+    <p><strong>Embeddings</strong> are how AI turns text into a form it can compare for meaning, not just matching keywords. Each piece of text gets converted into a long list of numbers that represents its meaning — texts with similar meaning end up with similar numbers, even if they don't share any of the same words.</p>
+    <p>This is why RAG systems can find a relevant paragraph even if your question doesn't use the exact same words as the source document — it's matching on meaning, not just text.</p>
+
+    <div class="dyk">
+      <div class="dyk-icon">💡</div>
+      <div class="dyk-body"><span class="dyk-label">Did You Know?</span><p>RAG is exactly what makes it possible to build a chatbot that accurately answers questions about your specific business — its hours, policies, and services — without retraining the underlying AI model at all.</p></div>
+    </div>
+
+    <div class="myth">
+      <div class="myth-label">⚠️ Common Misconception</div>
+      <div class="myth-row wrong"><span class="tag">MYTH</span><span>To get AI to "know" your business, you have to retrain the entire model on your data.</span></div>
+      <div class="myth-row right"><span class="tag">REALITY</span><span>RAG lets you feed relevant information to the AI at the moment of the question — no retraining required, and updates to your data take effect immediately.</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label review">📌 Quick Review</div>
+    <div class="review-box"><ul>
+      <li>RAG retrieves relevant information before the AI generates its answer.</li>
+      <li>Embeddings turn text into numbers that represent meaning, enabling search by concept, not just keyword.</li>
+      <li>RAG lets AI answer accurately about your specific data without retraining the model.</li>
+    </ul></div>
+  </div>
+
+  <div class="section">
+    <div class="section-label quiz">✅ Knowledge Check</div>
+    <div class="quiz-box" id="quiz-5-2">
+      <h3>🎯 Quick Check</h3>
+      <div class="quiz-q" id="q1"><p>1. What problem does RAG solve?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q1" data-correct="true">AI models don't automatically know your specific, private, or recent data</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">AI models are too slow to respond</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">AI models can't generate images</button>
+        </div><div class="quiz-feedback" id="fb-q1" style="display:none;"></div></div>
+      <div class="quiz-q" id="q2"><p>2. What do embeddings represent?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">The exact keywords in a document</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="true">The meaning of text, converted into numbers for comparison</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">The formatting style of a document</button>
+        </div><div class="quiz-feedback" id="fb-q2" style="display:none;"></div></div>
+      <div class="quiz-q" id="q3"><p>3. Does using RAG require retraining the AI model?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q3" data-correct="false">Yes, every time your data changes</button>
+          <button type="button" class="quiz-option" data-q="q3" data-correct="true">No — relevant information is retrieved and provided at the moment of the question</button>
+          <button type="button" class="quiz-option" data-q="q3" data-correct="false">Yes, but only once per year</button>
+        </div><div class="quiz-feedback" id="fb-q3" style="display:none;"></div></div>
+      <button id="quiz-submit" type="button">Submit Answers</button>
+      <div id="quiz-result" class="quiz-result"></div>
+    </div>
+  </div>
+  `;
+}
+
+function buildL6_1(){
+  return `
+  <div class="section">
+    <div class="section-label theory">📡 Theory</div>
+    <h2>What Happens to What You Type?</h2>
+    <p>Whenever you send a message to an AI tool, that text typically travels to the AI provider's servers to be processed. Depending on the tool and its settings, that data may be stored, may be used to improve future models, or may be handled with stricter privacy protections — it genuinely depends on the specific product and plan you're using.</p>
+    <p>The safest working assumption: <strong>treat AI chat inputs the way you'd treat an email to an outside company</strong> — useful and generally safe for most everyday tasks, but not the place for anything truly sensitive unless you've specifically confirmed how that tool handles data.</p>
+
+    <h2>A Simple Decision Tree</h2>
+    <div class="dtree">
+      <div class="dt-node q">Does this contain passwords, SSNs, medical records, or confidential client data?</div>
+      <div class="dt-branch">
+        <div class="dt-col"><div class="dt-col-label">IF YES</div><div class="dt-line"></div><div class="dt-node leaf stop">Don't paste it in — find another way</div></div>
+        <div class="dt-col"><div class="dt-col-label">IF NO</div><div class="dt-line"></div><div class="dt-node q">Would you be comfortable if this was read by someone at the AI company?</div>
+          <div class="dt-branch">
+            <div class="dt-col"><div class="dt-col-label">IF YES</div><div class="dt-line"></div><div class="dt-node leaf">Generally fine to proceed</div></div>
+            <div class="dt-col"><div class="dt-col-label">IF NO</div><div class="dt-line"></div><div class="dt-node leaf">Remove or anonymize the sensitive parts first</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2>Bias and Fairness</h2>
+    <p>AI models learn from human-generated data — which means they can absorb and repeat the same biases present in that data. This isn't a rare edge case; it's a well-documented limitation across the industry. Responsible use means staying alert to this, especially for anything involving hiring, lending, healthcare, or other high-stakes decisions about people, and keeping a human in the loop for those situations.</p>
+
+    <div class="dyk">
+      <div class="dyk-icon">💡</div>
+      <div class="dyk-body"><span class="dyk-label">Did You Know?</span><p>Many business AI tools (including enterprise plans from major providers) offer settings that specifically exclude your data from being used to train future models. It's always worth checking a tool's privacy settings if you're using it for business.</p></div>
+    </div>
+
+    <div class="myth">
+      <div class="myth-label">⚠️ Common Misconception</div>
+      <div class="myth-row wrong"><span class="tag">MYTH</span><span>Once you close the chat window, everything you typed disappears completely.</span></div>
+      <div class="myth-row right"><span class="tag">REALITY</span><span>Depending on the product and its settings, conversations may be retained for a period of time. Always check the specific privacy policy of the tool you're using rather than assuming.</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label review">📌 Quick Review</div>
+    <div class="review-box"><ul>
+      <li>Treat AI chat inputs like an email to an outside company — don't share truly sensitive data by default.</li>
+      <li>AI models can reflect biases present in their training data — keep a human in the loop for high-stakes decisions.</li>
+      <li>Data handling varies by tool and plan — check the specific privacy policy rather than assuming.</li>
+    </ul></div>
+  </div>
+
+  <div class="section">
+    <div class="section-label quiz">✅ Knowledge Check</div>
+    <div class="quiz-box" id="quiz-6-1">
+      <h3>🎯 Quick Check</h3>
+      <div class="quiz-q" id="q1"><p>1. What's a safe general rule for what you type into an AI chat?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q1" data-correct="true">Treat it like an email to an outside company — avoid truly sensitive data by default</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">Anything is safe to type since AI companies never store data</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">Only type information you'd post publicly on social media</button>
+        </div><div class="quiz-feedback" id="fb-q1" style="display:none;"></div></div>
+      <div class="quiz-q" id="q2"><p>2. Can AI models reflect biases from their training data?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q2" data-correct="true">Yes — this is a well-documented limitation across the industry</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">No, AI models are mathematically neutral and can't be biased</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">Only older AI models have this issue</button>
+        </div><div class="quiz-feedback" id="fb-q2" style="display:none;"></div></div>
+      <div class="quiz-q" id="q3"><p>3. Does closing the chat window always erase your conversation completely?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q3" data-correct="false">Yes, always, for every tool</button>
+          <button type="button" class="quiz-option" data-q="q3" data-correct="true">Not necessarily — it depends on the tool's specific data policy</button>
+          <button type="button" class="quiz-option" data-q="q3" data-correct="false">Only if you're on a paid plan</button>
+        </div><div class="quiz-feedback" id="fb-q3" style="display:none;"></div></div>
+      <button id="quiz-submit" type="button">Submit Answers</button>
+      <div id="quiz-result" class="quiz-result"></div>
+    </div>
+  </div>
+  `;
+}
+
+
+function buildL7_1(){
+  return `
+  <div class="section">
+    <div class="section-label theory">📡 Theory</div>
+    <p>You've already met most of these terms in earlier lessons. This one's a reference — a glossary you can come back to any time you hit a word you've forgotten. Tap any term to expand it.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-label terms">📖 Full Glossary</div>
+    <div class="term-grid">
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Artificial Intelligence (AI)</span><span class="term-toggle">+</span></div><div class="term-body">Software that performs tasks normally associated with human thinking, like recognizing patterns or generating content.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Machine Learning</span><span class="term-toggle">+</span></div><div class="term-body">AI that improves at a task by learning from data, rather than following hand-written rules.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Neural Network</span><span class="term-toggle">+</span></div><div class="term-body">A machine learning structure loosely inspired by the brain, made of layered math functions that together recognize complex patterns.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Large Language Model (LLM)</span><span class="term-toggle">+</span></div><div class="term-body">An AI model trained on massive amounts of text to predict and generate human-like language. Examples: Claude, GPT (the models behind ChatGPT), Gemini.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Foundation Model</span><span class="term-toggle">+</span></div><div class="term-body">A large, general-purpose AI model trained once on broad data, then used for many different tasks.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Generative AI</span><span class="term-toggle">+</span></div><div class="term-body">AI that creates new content — text, images, audio, video, or code — rather than just classifying or scoring existing input.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Token</span><span class="term-toggle">+</span></div><div class="term-body">A small chunk of text — a word, part of a word, or punctuation — that AI models actually process. Roughly 0.75 words on average.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Context Window</span><span class="term-toggle">+</span></div><div class="term-body">The maximum amount of text (in tokens) a model can "see" and reason over at once, including your message, conversation history, and its own response.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Hallucination</span><span class="term-toggle">+</span></div><div class="term-body">Confident-sounding but false or fabricated AI output — happens because the model generates plausible text, not verified facts.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Prompt</span><span class="term-toggle">+</span></div><div class="term-body">The instruction or question you give an AI. A well-written prompt is the single biggest lever for getting a good response.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Prompt Engineering</span><span class="term-toggle">+</span></div><div class="term-body">The practice of writing clear, specific instructions to get better results from an AI model.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">AI Agent</span><span class="term-toggle">+</span></div><div class="term-body">AI that can take actions using tools to accomplish a goal — not just reply in a conversation.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Workflow / Automation</span><span class="term-toggle">+</span></div><div class="term-body">A connected sequence of steps — a trigger, one or more actions, sometimes an AI step — that runs automatically, often without manual, repetitive work.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">API</span><span class="term-toggle">+</span></div><div class="term-body">A way for one piece of software to request something from another, without needing to know how it works internally.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">RAG (Retrieval-Augmented Generation)</span><span class="term-toggle">+</span></div><div class="term-body">A technique where relevant information is retrieved from your own data and given to the AI before it answers, so the response is grounded in specific facts.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Embeddings</span><span class="term-toggle">+</span></div><div class="term-body">A way of converting text into numbers that represent its meaning, so AI can search and compare by concept, not just exact keywords.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Fine-Tuning</span><span class="term-toggle">+</span></div><div class="term-body">Further training an existing AI model on a smaller, specific dataset to improve performance on a particular task or domain.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Multimodal</span><span class="term-toggle">+</span></div><div class="term-body">An AI model that can work with more than one type of input or output — for example, understanding both text and images.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">No-Code</span><span class="term-toggle">+</span></div><div class="term-body">Tools that let you build software, automations, or AI workflows visually, without writing programming code.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">Open vs. Closed Model</span><span class="term-toggle">+</span></div><div class="term-body">Open models (often called open-source or "open-weight," like Llama or Mistral) can be downloaded and run by anyone. Closed models (like Claude, GPT, or Gemini) are only accessible through the provider's API or app.</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label quiz">✅ Knowledge Check</div>
+    <div class="quiz-box" id="quiz-7-1">
+      <h3>🎯 Quick Check</h3>
+      <div class="quiz-q" id="q1"><p>1. What's the difference between an open and a closed AI model?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q1" data-correct="true">Open models can be downloaded and run by anyone; closed models are only accessible through the provider</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">Open models are always more accurate</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">There's no real difference between them</button>
+        </div><div class="quiz-feedback" id="fb-q1" style="display:none;"></div></div>
+      <div class="quiz-q" id="q2"><p>2. What does "multimodal" mean?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">The model runs on multiple computers at once</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="true">The model can work with more than one type of input or output, like text and images</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">The model has multiple personalities</button>
+        </div><div class="quiz-feedback" id="fb-q2" style="display:none;"></div></div>
+      <button id="quiz-submit" type="button">Submit Answers</button>
+      <div id="quiz-result" class="quiz-result"></div>
+    </div>
+  </div>
+  `;
+}
+
+function buildL8_1(){
+  return `
+  <div class="section">
+    <div class="section-label theory">📡 Theory</div>
+    <h2>AI Isn't Coming — It's Already Here</h2>
+    <p>By now you might be wondering what all this actually looks like in practice. Here's where AI is already doing real work across different industries and business sizes:</p>
+
+    <div class="term-grid">
+      <div class="term-card"><div class="term-card-header"><span class="term-name">🏥 Healthcare</span><span class="term-toggle">+</span></div><div class="term-body">Summarizing patient notes, drafting appointment reminders, and flagging scheduling conflicts — always with a clinician reviewing anything medical.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">🛍️ Retail & E-commerce</span><span class="term-toggle">+</span></div><div class="term-body">Product recommendations, customer service chatbots, and automatically writing product descriptions at scale.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">💰 Finance</span><span class="term-toggle">+</span></div><div class="term-body">Fraud detection (predictive AI), summarizing financial reports, and answering routine account questions.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">🎓 Education</span><span class="term-toggle">+</span></div><div class="term-body">Personalized tutoring support, drafting lesson plans, and generating practice questions at different difficulty levels.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">🔧 Local Service Businesses</span><span class="term-toggle">+</span></div><div class="term-body">A home-repair business using a website chat assistant to answer common questions and collect service requests 24/7, even outside business hours — so fewer inquiries go unanswered.</div></div>
+      <div class="term-card"><div class="term-card-header"><span class="term-name">📣 Marketing</span><span class="term-toggle">+</span></div><div class="term-body">Drafting social media captions, email campaigns, and ad copy variations for A/B testing in minutes instead of hours.</div></div>
+    </div>
+
+    <div class="dyk">
+      <div class="dyk-icon">💡</div>
+      <div class="dyk-body"><span class="dyk-label">Did You Know?</span><p>You don't need to be a large enterprise to benefit from AI. A single small business — a dental office, a salon, a landscaping company — can set up a website chat assistant that answers routine questions around the clock, often in days rather than months.</p></div>
+    </div>
+
+    <div class="myth">
+      <div class="myth-label">⚠️ Common Misconception</div>
+      <div class="myth-row wrong"><span class="tag">MYTH</span><span>AI is only useful for big tech companies with huge budgets.</span></div>
+      <div class="myth-row right"><span class="tag">REALITY</span><span>Some of the most practical, immediately useful AI applications today are for small and mid-size businesses automating everyday tasks — answering questions, following up on leads, scheduling.</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label review">📌 Quick Review</div>
+    <div class="review-box"><ul>
+      <li>AI is already at work across healthcare, retail, finance, education, and local service businesses.</li>
+      <li>Small businesses can benefit just as much as large enterprises — often with faster setup.</li>
+      <li>Most real-world use cases combine an AI step with a workflow connecting it to real tools.</li>
+    </ul></div>
+  </div>
+
+  <div class="section">
+    <div class="section-label quiz">✅ Knowledge Check</div>
+    <div class="quiz-box" id="quiz-8-1">
+      <h3>🎯 Quick Check</h3>
+      <div class="quiz-q" id="q1"><p>1. Is AI only useful for large enterprises?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">Yes, small businesses can't realistically use it</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="true">No — small and mid-size businesses use it for things like answering customer questions and scheduling</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">Only healthcare companies can use AI legally</button>
+        </div><div class="quiz-feedback" id="fb-q1" style="display:none;"></div></div>
+      <div class="quiz-q" id="q2"><p>2. What's an example of AI helping a local service business?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q2" data-correct="true">A website chat assistant answering common questions 24/7, even outside business hours</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">Replacing all employees with robots</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">Automatically filing business taxes with no oversight</button>
+        </div><div class="quiz-feedback" id="fb-q2" style="display:none;"></div></div>
+      <button id="quiz-submit" type="button">Submit Answers</button>
+      <div id="quiz-result" class="quiz-result"></div>
+    </div>
+  </div>
+  `;
+}
+
+function buildL9_1(){
+  return `
+  <div class="section">
+    <div class="section-label theory">🎓 You Made It</div>
+    <p>You now have a real, working vocabulary for AI — what it is, how it "thinks," where it can go wrong, and where it's already changing how people work. That's more than most people who use AI every day actually understand about it.</p>
+
+    <h2>Where This Leads Next</h2>
+    <div class="diagram" data-captions='["AI Foundations — complete! You understand the concepts and language.","Practice: pick two or three recurring tasks from your week and try them with an AI assistant, using the role-context-task-format pattern. Verify anything factual.","Automate: choose one small, repetitive process and connect AI to it with a no-code workflow tool — trigger, AI step, action. Keep a human review step for anything important."]'>
+      <div class="diagram-canvas">
+        <div class="dg-box"><div class="dg-icon">✅</div><div class="dg-label">AI Foundations</div><div class="dg-sub">Complete</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">🛠️</div><div class="dg-label">Practice</div><div class="dg-sub">Next up</div></div>
+        <div class="dg-arrow"></div>
+        <div class="dg-box"><div class="dg-icon">🚀</div><div class="dg-label">Automate</div><div class="dg-sub">When you're ready</div></div>
+      </div>
+      <div class="diagram-caption"></div>
+      <div class="diagram-controls"><button class="dg-nav-btn dg-prev">‹</button><div class="dg-dots"></div><button class="dg-nav-btn dg-next">›</button></div>
+    </div>
+
+    <div class="takeaway-box">
+      <h3>✓ Key Takeaways From This Course</h3>
+      <ul>
+        <li>AI recognizes patterns in data — it doesn't think or understand the way people do.</li>
+        <li>LLMs like Claude predict likely text, one token at a time — they don't retrieve stored answers.</li>
+        <li>Generative AI creates new content; always verify specific facts due to hallucinations.</li>
+        <li>Clear, specific prompts get dramatically better results than vague ones.</li>
+        <li>Agents take action using tools; workflows connect AI to the tools you already use.</li>
+        <li>RAG and embeddings let AI answer accurately about your own data, without retraining.</li>
+        <li>Treat sensitive data carefully, and keep a human in the loop for high-stakes decisions.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label quiz">✅ Final Knowledge Check</div>
+    <div class="quiz-box" id="quiz-9-1">
+      <h3>🎯 Final Check</h3>
+      <div class="quiz-q" id="q1"><p>1. What is the best mental model for how an LLM works?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">A search engine that looks up verified facts</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="true">A sophisticated system that predicts the most likely next piece of text</button>
+          <button type="button" class="quiz-option" data-q="q1" data-correct="false">A fixed set of hand-written if/then rules</button>
+        </div><div class="quiz-feedback" id="fb-q1" style="display:none;"></div></div>
+      <div class="quiz-q" id="q2"><p>2. What's the difference between a chatbot and an AI agent?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q2" data-correct="true">An agent can take actions using tools; a chatbot just replies in conversation</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">There's no real difference</button>
+          <button type="button" class="quiz-option" data-q="q2" data-correct="false">Agents are always physical robots</button>
+        </div><div class="quiz-feedback" id="fb-q2" style="display:none;"></div></div>
+      <div class="quiz-q" id="q3"><p>3. What does RAG let an AI system do?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q3" data-correct="true">Answer accurately using your own data, without retraining the model</button>
+          <button type="button" class="quiz-option" data-q="q3" data-correct="false">Generate images instead of text</button>
+          <button type="button" class="quiz-option" data-q="q3" data-correct="false">Run faster on older computers</button>
+        </div><div class="quiz-feedback" id="fb-q3" style="display:none;"></div></div>
+      <div class="quiz-q" id="q4"><p>4. What should you do before relying on a specific fact or citation from an AI?</p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-q="q4" data-correct="false">Trust it completely — models don't make factual mistakes</button>
+          <button type="button" class="quiz-option" data-q="q4" data-correct="true">Verify it independently, since hallucinations are possible</button>
+          <button type="button" class="quiz-option" data-q="q4" data-correct="false">Ignore it entirely, since it's definitely wrong</button>
+        </div><div class="quiz-feedback" id="fb-q4" style="display:none;"></div></div>
+      <button id="quiz-submit" type="button" data-final="true">Submit & Finish</button>
+      <div id="quiz-result" class="quiz-result"></div>
+    </div>
+  </div>
+
+  <div class="section" id="cert-section" style="display:none;">
+    <div class="cert-wrap" role="status">
+      <div class="cert-badge">🎉</div>
+      <h2>Course Complete</h2>
+      <p>You've finished <strong>AI Foundations: Practical AI for Business</strong> — nice work.</p>
+    </div>
+  </div>
+  `;
+}
+
+
+// ════════════════════════════════════════════════════════
+//  INIT — opens directly into the course
+// ════════════════════════════════════════════════════════
+function init(){
+  renderSidebar();
+  updateProgressBar();
+  goTo(VALID_IDS.has(state.currentLessonId) ? state.currentLessonId : flatChapters[0].id);
+}
+init();
+</script>
+</body>
+</html>
